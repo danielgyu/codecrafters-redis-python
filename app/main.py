@@ -1,9 +1,12 @@
 import asyncio
 
 
-async def _handle_read(reader: asyncio.StreamReader) -> None:
-    data = await reader.read(1024)
-    print(f"received {data}")
+async def _handle_read(reader: asyncio.StreamReader) -> bool:
+    if data := await reader.read(100):
+        print(f"received {data}")
+        return False
+    else:
+        return True
 
 
 async def _handle_write(writer: asyncio.StreamWriter) -> None:
@@ -16,15 +19,14 @@ async def _handle_request(
     reader: asyncio.StreamReader,
     writer: asyncio.StreamWriter,
 ) -> None:
-    print("start request")
-    await _handle_read(reader)
-    await _handle_write(writer)
-    print("end request\n")
+    finished = False
+    while not finished:
+        finished = await _handle_read(reader)
+        if not finished:
+            await _handle_write(writer)
 
 
 async def main():
-    print("Logs from your program will appear here!")
-
     server_socket = await asyncio.start_server(
         _handle_request,
         "localhost",
