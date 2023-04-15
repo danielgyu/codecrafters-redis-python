@@ -9,7 +9,7 @@ def execute(commands: list[RedisCommand]) -> str | None:
     for command in commands:
         match command.command:
             case "PING":
-                return "pong"
+                return "PONG"
             case "ECHO":
                 return command.get_value()
             case _:
