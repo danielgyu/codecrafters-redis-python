@@ -10,8 +10,11 @@ async def _handle_read(reader: asyncio.StreamReader) -> str | None:
         return None
 
     print(f"redis-server | request_data: {data=}")
-    commands = parse(data)
-    return execute(commands)
+    command = parse(data)
+    if not command:
+        return None
+
+    return execute(command)
 
 
 async def _handle_write(
@@ -30,9 +33,7 @@ async def _handle_request(
     finished = False
     while not finished:
         response_data = await _handle_read(reader)
-        if response_data == "PREFLIGHT":
-            await _handle_write(writer, "") 
-        elif response_data:
+        if response_data is not None:
             print(f"redis-server | {response_data=}")
             await _handle_write(writer, response_data)
         else:

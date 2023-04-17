@@ -1,4 +1,4 @@
-COMMANDS = ("PING", "ECHO")
+COMMANDS = ("PING", "ECHO", "SET", "GET")
 TYPE_DEFINER = ("+", "-", ":", "$", "*")
 IGNORE = ("COMMAND", "DOCS")
 
@@ -14,20 +14,26 @@ class RedisCommand:
     def get_value(self) -> str:
         return self._values[-1]
 
-def parse(data: bytes) -> list[RedisCommand]:
+    def get_pair(self) -> tuple[str, str]:
+        return self._values[0], self._values[1]
+
+def parse(data: bytes) -> RedisCommand | None:
     line = data.decode().split("\r\n")[:-1]
 
-    commands = []
+    command = None
     for token in line:
         print(f"redis-server | parse | {token=}")
-        if token[0] in TYPE_DEFINER or token in IGNORE:
+        if token[0] in TYPE_DEFINER:
             continue
+        if token in IGNORE:
+            return RedisCommand("PREFLIGHT")
         elif token.upper() in COMMANDS:
-            commands.append(RedisCommand(token.upper()))
+            command = RedisCommand(token.upper())
         elif token.isalpha():
-            commands[-1].add_value(token)
+            assert command
+            command.add_value(token)
         else:
-            raise Exception("not implemented = ", token)
+            raise Exception(f"not implemented {token=}")
 
-    print(f"redis-server | {commands=}")
-    return commands
+    print(f"redis-server | {command=}")
+    return command
