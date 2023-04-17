@@ -17,7 +17,7 @@ def execute(command: RedisCommand) -> str | None:
         case "SET":
             (key, value) = command.get_pair()
             storage[key] = value
-            return "1"
+            return "OK"
         case "GET":
             key = command.get_value()
             return storage[key]
