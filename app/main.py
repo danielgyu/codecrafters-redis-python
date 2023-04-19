@@ -9,9 +9,10 @@ async def _handle_read(reader: asyncio.StreamReader) -> str | None:
     if not data:
         return None
 
-    print(f"redis-server | request_data: {data=}")
+    print(f"handle_read | request_data: {data=}")
     command = parse(data)
     if not command:
+        print("handle_read | data is none")
         return None
 
     return execute(command)
