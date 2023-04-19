@@ -70,6 +70,6 @@ class SetCommand(RedisCommand):
         for idx, value in enumerate(values[2:], 2):
             match value.upper():
                 case "PX":
-                    expire_after = values[idx+1]
+                    expire_after_in_ms = (float(values[idx+1]) // 1000)
                     now = time.time()
-                    self._expiry_in_milliseconds = now + float(expire_after)
+                    self._expiry_in_milliseconds = now + float(expire_after_in_ms)

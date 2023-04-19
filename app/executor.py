@@ -39,7 +39,7 @@ def execute(command: RedisCommand) -> str | None:
             key = command.get_value()
             set_storage = storage[key]
 
-            if set_storage.expiry is not 'None':
+            if set_storage.expiry != 'None':
                 now = time.time()
                 if str(now) >= set_storage.expiry:
                     return "$-1\r\n"
