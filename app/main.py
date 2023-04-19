@@ -23,7 +23,7 @@ async def _handle_write(
     data: str,
 ) -> None:
     if data == "NONE":
-        response = b"$-1\r\n"
+        response = b"$" + "-1".encode() + b"\r\n"
     else:
         response = b"+" + data.encode() + b"\r\n"
 
