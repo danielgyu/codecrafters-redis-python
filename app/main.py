@@ -22,7 +22,12 @@ async def _handle_write(
     writer: asyncio.StreamWriter,
     data: str,
 ) -> None:
-    writer.write(b"+" + data.encode() + b"\r\n")
+    if data == "NONE":
+        response = b"$-1\r\n"
+    else:
+        response = b"+" + data.encode() + b"\r\n"
+
+    writer.write(response)
     await writer.drain()
     print(f"redis-server | sent response: {data=}")
 
