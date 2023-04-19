@@ -1,4 +1,5 @@
-import time
+from .time_util import get_current_epoch_in_ms
+
 
 class RedisCommand():
     def __init__(self):
@@ -70,6 +71,6 @@ class SetCommand(RedisCommand):
         for idx, value in enumerate(values[2:], 2):
             match value.upper():
                 case "PX":
-                    expire_after_in_ms = (float(values[idx+1]) // 1000)
-                    now = time.time()
-                    self._expiry_in_milliseconds = now + float(expire_after_in_ms)
+                    expire_after = float(values[idx+1])
+                    now = get_current_epoch_in_ms()
+                    self._expiry_in_milliseconds = now + expire_after

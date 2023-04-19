@@ -1,6 +1,6 @@
-import time
 from dataclasses import dataclass
 
+from .time_util import get_current_epoch_in_ms
 from .parser import RedisCommand
 
 storage = {}
@@ -40,7 +40,7 @@ def execute(command: RedisCommand) -> str | None:
             set_storage = storage[key]
 
             if set_storage.expiry != 'None':
-                now = time.time()
+                now = get_current_epoch_in_ms()
                 if str(now) >= set_storage.expiry:
                     return "$-1\r\n"
 
