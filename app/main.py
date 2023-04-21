@@ -27,7 +27,7 @@ async def _handle_write(
     else:
         response = b"+" + data.encode() + b"\r\n"
 
-    print(f"redis-server | sending response: {data=}")
+    print(f"redis-server | sending response: {response}")
     writer.write(response)
     await writer.drain()
 
