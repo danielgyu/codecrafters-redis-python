@@ -23,7 +23,7 @@ async def _handle_write(
     data: str,
 ) -> None:
     if data == "NONE":
-        response = b"$" + "-1".encode() + b"\r\n"
+        response = b"$-1\r\n"
     else:
         response = b"+" + data.encode() + b"\r\n"
 
@@ -40,11 +40,10 @@ async def _handle_request(
     while not finished:
         response_data = await _handle_read(reader)
         if response_data is not None:
-            print(f"redis-server | {response_data=}")
             await _handle_write(writer, response_data)
         else:
-            print(f"redis-server | finished")
             finished = True
+            print(f"redis-server | finished")
 
 
 async def main():
