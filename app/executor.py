@@ -42,7 +42,7 @@ def execute(command: RedisCommand) -> str | None:
             if set_storage.expiry != 'None':
                 now = get_current_epoch_in_ms()
                 if str(now) >= set_storage.expiry:
-                    return "$-1\r\n"
+                    return "NULL"
 
             return set_storage.value
 

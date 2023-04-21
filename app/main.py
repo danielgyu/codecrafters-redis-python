@@ -22,7 +22,7 @@ async def _handle_write(
     writer: asyncio.StreamWriter,
     data: str,
 ) -> None:
-    if data == "NONE":
+    if data == "NULL":
         response = b"$-1\r\n"
     else:
         response = b"+" + data.encode() + b"\r\n"
