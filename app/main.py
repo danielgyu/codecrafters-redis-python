@@ -23,13 +23,13 @@ async def _handle_write(
     data: str,
 ) -> None:
     if data == "NONE":
-        response = "$-1\r\n"
+        response = b"$-1\r\n"
     else:
         response = b"+" + data.encode() + b"\r\n"
 
+    print(f"redis-server | sending response: {data=}")
     writer.write(response)
     await writer.drain()
-    print(f"redis-server | sent response: {data=}")
 
 
 async def _handle_request(
